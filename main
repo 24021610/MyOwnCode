@@ -34,11 +34,15 @@ int main(int argc, char *argv[])
                  SDL_GetMouseState(&x, &y);
                  processClick(x, y, game);
                  graphics.render(game);
-                 break;
+                 if (game.winCondition()){
+                    graphics.clearRenderer();
+                    graphics.renderxy(game);
+                    game.newgame();
+
+                    }
+                    SDL_Delay(10);
+                    break;
+                 }
         }
-        SDL_Delay(100);
     }
 
-    graphics.sdlQuit();
-
-}
