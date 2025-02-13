@@ -10,7 +10,8 @@
     struct Graphics{
         SDL_Window* window;
         SDL_Renderer* renderer;
-        SDL_Texture* cell_empty, *cell_o, *cell_x;
+        SDL_Texture* cell_empty, *cell_o, *cell_x, *o_win, *x_win;
+
     void clearRenderer(){
     SDL_RenderClear(renderer);
     }
@@ -30,7 +31,15 @@
             if (texture == nullptr) SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "Load Texture: %s", IMG_GetError());
             return texture;
         }
-
+    void renderxy(Tictactoe game){
+        SDL_Rect rect;
+            rect.x = 100;
+            rect.y = 100;
+            rect.w = 600;
+            rect.h = 400;
+        (game.currentMove == X_CELL)? SDL_RenderCopy(renderer, x_win, NULL, &rect) : SDL_RenderCopy(renderer, o_win, NULL, &rect);
+        presentScene();
+    }
 
     void initSDL(){
         window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
@@ -46,6 +55,9 @@
         cell_empty = loadTexture("cell_empty.PNG");
         cell_o = loadTexture("cell_o.PNG");
         cell_x = loadTexture("cell_x.PNG");
+        o_win = loadTexture("o_win.PNG");
+        x_win = loadTexture("x_win.PNG");
+
     }
         void presentScene(){
         SDL_RenderPresent(renderer);
@@ -60,7 +72,7 @@
         }
 
         void render(const Tictactoe& game) {
-        //prepareScene();
+
 
         for (int i = 0; i < BOARD_SIZE; i++){
             for (int j = 0; j < BOARD_SIZE; j++) {
@@ -76,8 +88,6 @@
 
         presentScene();
     }
-
-
         void sdlQuit(){
             SDL_DestroyRenderer(renderer);
             SDL_DestroyTexture(cell_empty);
@@ -87,11 +97,7 @@
             IMG_Quit();
             SDL_Quit();
 
-
     }
 };
-
-
-
 #endif // GRAPHICS_H_INCLUDED
 
